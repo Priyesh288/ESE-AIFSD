@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: ai-emp-backend
+    env: node
+    plan: free
+    region: ohio
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: MONGO_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: OPENROUTER_API_KEY
+        sync: false
+
+  - type: web
+    name: ai-emp-frontend
+    env: static
+    plan: free
+    region: ohio
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: ai-emp-backend
+          envVarKey: RENDER_EXTERNAL_URL
