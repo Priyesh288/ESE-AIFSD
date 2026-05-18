@@ -14,6 +14,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.get('/api/debug', (req, res) => {
+  res.json({
+    hasMongoUri: !!process.env.MONGO_URI,
+    uriLength: process.env.MONGO_URI ? process.env.MONGO_URI.length : 0,
+    startsWithMongo: process.env.MONGO_URI ? process.env.MONGO_URI.startsWith('mongodb') : false,
+  });
+});
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/employees', employeeRoutes);
